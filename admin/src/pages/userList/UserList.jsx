@@ -58,8 +58,16 @@ const UserList = () => {
     },
   ];
   return (
-    <div>UserList</div>
-  )
-}
+    <div className="userList">
+      <DataGrid
+        rows={data}
+        disableSelectionOnClick
+        columns={columns}
+        pageSize={8}
+        checkboxSelection
+      />
+    </div>
+  );
+};
 
-export default UserList
+export default UserList;
