@@ -43,7 +43,21 @@ const Home = () => {
     getStats();
   }, [MONTHS]);
 
-  return <div>Home</div>;
+  return (
+    <div className="home">
+      <FeaturedInfo />
+      <Chart
+        data={userStats}
+        title="User Analytics"
+        grid
+        dataKey="Active User"
+      />
+      <div className="homeWidgets">
+        <WidgetSm />
+        <WidgetLg />
+      </div>
+    </div>
+  );
 };
 
 export default Home;
