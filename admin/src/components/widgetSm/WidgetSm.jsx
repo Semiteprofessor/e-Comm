@@ -1,6 +1,20 @@
-import React from 'react'
+import "./widgetSm.css";
+import { Visibility } from "@material-ui/icons";
+import { useEffect, useState } from "react";
+import { userRequest } from "../../requestMethods";
 
 const WidgetSm = () => {
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    const getUsers = async () => {
+      try {
+        const res = await userRequest.get("users/?new=true");
+        setUsers(res.data);
+      } catch {}
+    };
+    getUsers();
+  }, []);
   return (
     <div className="widgetSm">
       <span className="widgetSmTitle">New Join Members</span>
@@ -27,6 +41,6 @@ const WidgetSm = () => {
       </ul>
     </div>
   );
-}
+};
 
-export default WidgetSm
+export default WidgetSm;
