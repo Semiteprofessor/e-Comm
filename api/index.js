@@ -16,11 +16,11 @@ app.use(cors());
 app.use(express.json());
 
 // Endpoints
-app.use("/api/auth", authRoute);
-app.use("/api/users", userRoute);
-app.use("/api/products", productRoute);
-app.use("/api/carts", cartRoute);
-app.use("/api/orders", orderRoute);
+app.use("/api/v1/auth", authRoute);
+app.use("/api/v1/users", userRoute);
+app.use("/api/v1/products", productRoute);
+app.use("/api/v1/carts", cartRoute);
+app.use("/api/v1/orders", orderRoute);
 
 app.listen(process.env.PORT || 8899, () => {
   console.log("Backend server is running!");

@@ -1,4 +1,12 @@
 const jwt = require("jsonwebtoken");
+const { v4: uuidv4 } = require("uuid");
+const bcrypt = require("bcrypt");
+const {
+  hashPassword,
+  generateOtp,
+  comparePassword,
+} = require("../utils/helpers");
+
 const User = require("../models/user.model");
 const {
   registerUserValidation,
@@ -7,85 +15,92 @@ const {
 const CryptoJS = require("crypto-js");
 
 const register = async (req, res) => {
+  //create user
   const { error } = registerUserValidation(req.body);
-  if (error !== undefined)
-    return res.status(401).json({
+  if (error !== undefined) {
+    res.status(400).json({
       status: true,
       message: error.details[0].message || "Bad request",
     });
+    return;
+  }
+
   try {
     const { name, username, email, password } = req.body;
-    const alreadyExist = await User.find({ email });
-    if (alreadyExist.length > 0) {
-      res.status(401).json({ status: false, message: "User already exist" });
+    const checkIfUserExist = await User.findOne({ email: email });
+
+    if (checkIfUserExist) {
+      res.status(400).json({
+        status: false,
+        message: "User already exist!",
+      });
+      return;
     }
+
+    const { hash } = await hashPassword(password);
     await User.create({
       name,
       username,
       email,
-      password: CryptoJS.AES.encrypt(
-        req.body.password,
-        process.env.PASS_SECRET
-      ).toString(),
+      password: hash,
     });
 
-    res.status(200).json({
+    res.status(201).json({
       status: true,
-      message: "User registration successful",
+      message: "User registered successfully",
     });
   } catch (error) {
     res.status(500).json({
       status: false,
-      message: "User registration failed" + error,
+      message: error.message || "Internal server error",
     });
   }
 };
 
 const login = async (req, res) => {
-  const { error } = loginUserValidation(req.body);
-
+  //login user
+  const { email, password } = req.body;
   try {
-    const { email, password } = req.body;
-    const userExist = User.findOne({ email });
+    if (!email || !password) throw new Error("All fields are required");
+    const user = await User.findOne({ email: email });
+    if (!user) throw new Error("Invalid email or password");
 
-    if (!userExist) {
-      res.status(401).json({
-        status: false,
-        message: "Invalid credentials!",
-      });
-    }
+    const dataToaddInMyPayload = {
+      email: user.email,
+      _id: uuidv4(),
+    };
 
-    const hashedPassword = CryptoJS.AES.decrypt(
-      userExist.password,
-      process.env.PASS_SECRET
+    const compareHash = await bcrypt.compare(
+      password,
+      user.password,
+      function (err, result) {
+        if (err) {
+          console.error("Error comparing passwords:", err);
+        }
+
+        if (!result) {
+          console.log("Passwords do not match");
+        } else {
+          console.log("Passwords match");
+        }
+      }
     );
+    const token = jwt.sign(dataToaddInMyPayload, process.env.JWT_SECRET, {
+      expiresIn: "1d",
+    });
 
-    const OriginalPassword = hashedPassword.toString(CryptoJS.enc.Utf8);
+    res.setHeader("Authorization", "Bearer " + token);
 
-    OriginalPassword !== password &&
-      res.status(401).json("Invalid credentials!");
-
-    const accessToken = jwt.sign(
-      {
-        id: userExist._id,
-        isAdmin: userExist.isAdmin,
-      },
-      process.env.JWT_SECRET,
-      { expiresIn: "24h" }
-    );
-
-    // const {password, ...info} = userExist._doc;
-
-    res.status(200).json({
+    return res.status(200).json({
       status: true,
       message: "User logged in successfully",
-      userExist,
-      accessToken,
+      data: user,
+      token: token,
     });
   } catch (error) {
-    res.status(500).json({
+    res.status(400).json({
       status: false,
-      message: "User registration failed" + error,
+      message: error.message || "Internal server error",
     });
   }
 };
