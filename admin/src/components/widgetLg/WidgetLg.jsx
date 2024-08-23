@@ -1,6 +1,22 @@
-import React from 'react'
+import { useEffect, useState } from "react";
+import { userRequest } from "../../requestMethods";
+import "./widgetLg.css";
+import { format } from "timeago.js";
 
 const WidgetLg = () => {
+  const [orders, setOrders] = useState([]);
+
+  useEffect(() => {
+    const getOrders = async () => {
+      try {
+        const res = await userRequest.get("orders");
+        setOrders(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getOrders();
+  }, []);
   return (
     <div className="widgetLg">
       <h3 className="widgetLgTitle">Latest transactions</h3>
@@ -26,6 +42,6 @@ const WidgetLg = () => {
       </table>
     </div>
   );
-}
+};
 
-export default WidgetLg
+export default WidgetLg;
