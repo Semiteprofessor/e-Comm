@@ -3,7 +3,7 @@ const { default: mongoose } = require("mongoose");
 const CartSchema = new mongoose.Schema(
   {
     userId: { type: String, required: true },
-    Carts: [
+    carts: [
       {
         CartId: {
           type: String,
@@ -17,6 +17,7 @@ const CartSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
 const Cart = mongoose.model("Cart", CartSchema);
 
 module.exports = Cart;
