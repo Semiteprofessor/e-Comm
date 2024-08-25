@@ -59,9 +59,44 @@ const deleteOrder = async (req, res) => {
 };
 
 const getOrder = async (req, res) => {
-    try {
-        const order = 
-    } catch (error) {
-        
-    }
+  try {
+    const orderId = req.params._id;
+    const order = await Order.findById();
+
+    res.status(200).json({
+      status: true,
+      message: "Single Order fetched successfully",
+      order,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: true,
+      message: "Error fetching single order",
+    });
+  }
+};
+
+const getOrders = async (req, res) => {
+  try {
+    const orders = await Order.find();
+
+    res.status(200).json({
+      status: true,
+      message: "Orders fetched successfully",
+      orders,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: true,
+      message: "Error fetching order",
+    });
+  }
+};
+
+module.exports = {
+  createOrder,
+  updateOrder,
+  deleteOrder,
+  getOrder,
+  getOrders,
 };
