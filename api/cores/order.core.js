@@ -28,17 +28,40 @@ const updateOrder = async (req, res) => {
       { $set: req.body },
       { new: true }
     );
-    res
-      .status(200)
-      .json({
-        status: true,
-        message: "Order updated successfully",
-        updateOrder,
-      });
+    res.status(200).json({
+      status: true,
+      message: "Order updated successfully",
+      updateOrder,
+    });
   } catch (error) {
     res.status(500).json({
       status: true,
       message: "Error updating order",
     });
   }
+};
+
+const deleteOrder = async (req, res) => {
+  try {
+    const orderId = req.params._id;
+    await Order.findByIdAndDelete(orderId);
+
+    res.status(200).json({
+      status: true,
+      message: "Order deleted successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: true,
+      message: "Error deleting order",
+    });
+  }
+};
+
+const getOrder = async (req, res) => {
+    try {
+        const order = 
+    } catch (error) {
+        
+    }
 };

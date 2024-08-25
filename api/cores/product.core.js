@@ -61,7 +61,7 @@ const deleteProduct = async (req, res) => {
   });
 };
 
-const getSingleProduct = async (req, res) => {
+const getProduct = async (req, res) => {
   try {
     const productId = req.params._id;
     const product = await Product.findById(productId);
@@ -112,6 +112,6 @@ module.exports = {
   createProduct,
   updateProduct,
   deleteProduct,
-  getSingleProduct,
+  getProduct,
   getProducts,
 };
