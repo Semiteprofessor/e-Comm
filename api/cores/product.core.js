@@ -107,3 +107,11 @@ const getProducts = async (req, res) => {
     });
   }
 };
+
+module.exports = {
+  createProduct,
+  updateProduct,
+  deleteProduct,
+  getSingleProduct,
+  getProducts,
+};
