@@ -45,3 +45,18 @@ const updateProduct = async (req, res) => {
     Message: "Error creating product",
   });
 };
+
+const deleteProduct = async (req, res) => {
+  try {
+    const productId = req.params._id;
+    await Product.findByIdAndDelete(productId);
+    res.status(200).json({
+      status: true,
+      message: "Product updated successfully",
+    });
+  } catch (error) {}
+  res.status(500).json({
+    status: false,
+    Message: "Error creating product",
+  });
+};
