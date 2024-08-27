@@ -1,9 +1,4 @@
 const User = require("../models/user.model");
-const {
-  verifyToken,
-  verifyTokenAndAuthorization,
-  verifyTokenAndAdmin,
-} = require("../utils/verifyToken.util");
 
 const updateUser = async (req, res, next) => {
   const { password } = req.body;
@@ -15,8 +10,9 @@ const updateUser = async (req, res, next) => {
   }
 
   try {
+    const { userId } = req.params._id;
     const updatedUser = await User.findByIdAndUpdate(
-      req.params._id,
+      userId,
       {
         $set: req.body,
       },
@@ -29,8 +25,9 @@ const updateUser = async (req, res, next) => {
 };
 
 const deleteUser = async (req, res, next) => {
+  const { userId } = req.params._id;
   try {
-    await User.findByIdAndDelete(req.params._id);
+    await User.findByIdAndDelete(userId);
     res.status(200).json("User has been deleted...");
   } catch (err) {
     res.status(500).json(err);
@@ -38,8 +35,9 @@ const deleteUser = async (req, res, next) => {
 };
 
 const getSingleUser = async (req, res, next) => {
+  const { userId } = req.params._id;
   try {
-    const user = await User.findById(req.params._id);
+    const user = await User.findById(userId);
     const { password, ...others } = user._doc;
     res.status(200).json(others);
   } catch (err) {
@@ -47,4 +45,47 @@ const getSingleUser = async (req, res, next) => {
   }
 };
 
-const getSingleUser = async (req, res, next) => {};
+const getAllUsers = async (req, res, next) => {
+  const query = req.query.new;
+  try {
+    const users = query
+      ? await User.find().sort({ _id: -1 }).limit(5)
+      : await User.find();
+    res.status(200).json(users);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+const getUserStatistics = async (req, res, next) => {
+  const date = new Date();
+  const lastYear = new Date(date.setFullYear(date.getFullYear() - 1));
+
+  try {
+    const data = await User.aggregate([
+      { $match: { createdAt: { $gte: lastYear } } },
+      {
+        $project: {
+          month: { $month: "$createdAt" },
+        },
+      },
+      {
+        $group: {
+          _id: "$month",
+          total: { $sum: 1 },
+        },
+      },
+    ]);
+    res.status(200).json(data);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+module.exports = {
+  updateUser,
+  deleteUser,
+  getSingleUser,
+  getAllUsers,
+  getUserStatistics,
+};
