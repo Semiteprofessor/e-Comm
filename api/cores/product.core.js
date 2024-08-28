@@ -67,13 +67,43 @@ const getSingleProduct = async (req, res) => {
     const product = await Product.findById(productId);
     res.status(200).json({
       status: true,
-      message: "Product updated successfully",
+      message: "Single Product fetched successfully",
       product,
     });
   } catch (error) {
     res.status(500).json({
       status: false,
-      Message: "Error creating product",
+      Message: "Error fetching single product",
+    });
+  }
+};
+
+const getProducts = async (req, res) => {
+  const qNew = req.query.new;
+  const qCategory = req.query.category;
+  try {
+    let products;
+
+    if (qNew) {
+      products = await Product.find().sor({ createdAt: -1 }).limit(1);
+    } else if (qCategory) {
+      products = await Product.find({
+        categories: {
+          $in: [qCategory],
+        },
+      });
+    } else {
+      products = await Product.find();
+    }
+    res.status(200).json({
+      status: true,
+      message: "Product fetched successfully",
+      product,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: false,
+      Message: "Error fetching product",
     });
   }
 };
