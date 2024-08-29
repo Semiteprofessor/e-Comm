@@ -1,4 +1,4 @@
-import { Add, Remove } from "@material-ui/icons";
+import { Add, Remove } from "@mui/icons-material";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import Announcement from "../components/Announcement";
@@ -200,33 +200,35 @@ const Cart = () => {
         <Bottom>
           <Info>
             {cart.products.map((product) => (
-              <Product>
-                <ProductDetail>
-                  <Image src={product.img} />
-                  <Details>
-                    <ProductName>
-                      <b>Product:</b> {product.title}
-                    </ProductName>
-                    <ProductId>
-                      <b>ID:</b> {product._id}
-                    </ProductId>
-                    <ProductColor color={product.color} />
-                    <ProductSize>
-                      <b>Size:</b> {product.size}
-                    </ProductSize>
-                  </Details>
-                </ProductDetail>
-                <PriceDetail>
-                  <ProductAmountContainer>
-                    <Add />
-                    <ProductAmount>{product.quantity}</ProductAmount>
-                    <Remove />
-                  </ProductAmountContainer>
-                  <ProductPrice>
-                    $ {product.price * product.quantity}
-                  </ProductPrice>
-                </PriceDetail>
-              </Product>
+              <>
+                <Product>
+                  <ProductDetail>
+                    <Image src={product.img} />
+                    <Details>
+                      <ProductName>
+                        <b>Product:</b> {product.title}
+                      </ProductName>
+                      <ProductId>
+                        <b>ID:</b> {product._id}
+                      </ProductId>
+                      <ProductColor color={product.color} />
+                      <ProductSize>
+                        <b>Size:</b> {product.size}
+                      </ProductSize>
+                    </Details>
+                  </ProductDetail>
+                  <PriceDetail>
+                    <ProductAmountContainer>
+                      <Add />
+                      <ProductAmount>{product.quantity}</ProductAmount>
+                      <Remove />
+                    </ProductAmountContainer>
+                    <ProductPrice>
+                      $ {product.price * product.quantity}
+                    </ProductPrice>
+                  </PriceDetail>
+                </Product>
+              </>
             ))}
             <Hr />
           </Info>
