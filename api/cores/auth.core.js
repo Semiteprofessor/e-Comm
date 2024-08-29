@@ -1,3 +1,4 @@
+const jwt = require("jsonwebtoken");
 const User = require("../models/user.model");
 const {
   registerUserValidation,
@@ -61,6 +62,30 @@ const login = async (req, res) => {
 
     const OriginalPassword = hashedPassword.toString(CryptoJS.enc.Utf8);
 
-    
-  } catch (error) {}
+    OriginalPassword !== password &&
+      res.status(401).json("Invalid credentials!");
+
+    const accessToken = jwt.sign(
+      {
+        id: userExist._id,
+        isAdmin: userExist.isAdmin,
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: "24h" }
+    );
+
+    // const {password, ...info} = userExist._doc;
+
+    res.status(200).json({
+      status: true,
+      message: "User logged in successfully",
+      userExist,
+      accessToken,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: false,
+      message: "User registration failed" + error,
+    });
+  }
 };
