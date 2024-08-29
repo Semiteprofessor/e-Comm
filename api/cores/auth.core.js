@@ -1,5 +1,8 @@
 const User = require("../models/user.model");
-const { registerUserValidation } = require("../validations/user.vdn");
+const {
+  registerUserValidation,
+  loginUserValidation,
+} = require("../validations/user.vdn");
 const CryptoJS = require("crypto-js");
 
 const register = async (req, res) => {
@@ -21,8 +24,43 @@ const register = async (req, res) => {
       email,
       password: CryptoJS.AES.encrypt(
         req.body.password,
-        process.env.PASS_SEC
+        process.env.PASS_SECRET
       ).toString(),
     });
+
+    res.status(200).json({
+      status: true,
+      message: "User registration successful",
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: false,
+      message: "User registration failed" + error,
+    });
+  }
+};
+
+const login = async (req, res) => {
+  const { error } = loginUserValidation(req.body);
+
+  try {
+    const { email, password } = req.body;
+    const userExist = User.findOne({ email });
+
+    if (!userExist) {
+      res.status(401).json({
+        status: false,
+        message: "Invalid credentials!",
+      });
+    }
+
+    const hashedPassword = CryptoJS.AES.decrypt(
+      userExist.password,
+      process.env.PASS_SECRET
+    );
+
+    const OriginalPassword = hashedPassword.toString(CryptoJS.enc.Utf8);
+
+    
   } catch (error) {}
 };
