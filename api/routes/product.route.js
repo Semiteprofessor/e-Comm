@@ -26,3 +26,5 @@ router.get("/find/:id", getProduct);
 
 // GET PRODUCTS ROUTE
 router.get("/", getProducts);
+
+module.exports = router;

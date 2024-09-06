@@ -27,3 +27,5 @@ router.get("/find/:id", verifyTokenAndAuthorization, getCart);
 
 // GET CARTS ROUTE
 router.get("/", verifyTokenAndAdmin, getCarts);
+
+module.exports = router;

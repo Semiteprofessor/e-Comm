@@ -30,3 +30,5 @@ router.get("/", getOrders);
 
 // GET MONTH;Y INCOME ROUTE
 router.get("/income", verifyTokenAndAdmin, getMonthlyIncome);
+
+module.exports = router;

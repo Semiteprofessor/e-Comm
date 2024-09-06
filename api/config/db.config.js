@@ -1,6 +1,6 @@
 require("dotenv").config();
 
-const { default: mongoose } = require("mongoose");
+const mongoose = require("mongoose");
 
 const dbHost = process.env.DB_HOST;
 const dbPort = process.env.DB_PORT;
@@ -11,7 +11,7 @@ const connectDB = async () => {
     await mongoose.connect(`mongodb://${dbHost}:${dbPort}/${dbName}`);
     console.log("MongoDB connection successful");
   } catch (error) {
-    console.log("MongoDB connection failed" + error);
+    console.log("MongoDB connection failed " + error);
   }
 };
 
