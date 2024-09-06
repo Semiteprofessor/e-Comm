@@ -2,7 +2,14 @@ const {
   verifyToken,
   verifyTokenAndAdmin,
 } = require("../utils/verifyToken.util");
-const { createOrder, updateOrder, deleteOrder, getOrder, getOrders } = require("../cores/order.core");
+const {
+  createOrder,
+  updateOrder,
+  deleteOrder,
+  getOrder,
+  getOrders,
+  getMonthlyIncome,
+} = require("../cores/order.core");
 
 const router = require("express").Router();
 
@@ -20,3 +27,6 @@ router.get("/find/:id", getOrder);
 
 // GET ORDERS ROUTE
 router.get("/", getOrders);
+
+// GET MONTH;Y INCOME ROUTE
+router.get("/income", verifyTokenAndAdmin, getMonthlyIncome);
