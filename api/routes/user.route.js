@@ -27,3 +27,5 @@ router.get("/", verifyTokenAndAdmin, getAllUsers);
 
 // GET USER STATISTICS
 router.get("/stats", verifyTokenAndAdmin, getUserStatistics);
+
+module.exports = router;

@@ -93,6 +93,15 @@ const getOrders = async (req, res) => {
   }
 };
 
+const getMonthlyIncome = async (req, res) => {
+  const productId = req.query.productId;
+  const date = new Date();
+  const lastMonth = new Date(date.setMonth(date.getMonth() - 1));
+  const previousMonth = new Date(new Date().setMonth(lastMonth.getMonth() - 1));
+  try {
+  } catch (error) {}
+};
+
 module.exports = {
   createOrder,
   updateOrder,
