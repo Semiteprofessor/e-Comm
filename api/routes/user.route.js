@@ -1,6 +1,12 @@
 const router = require("express").Router();
 
-const { updateUser, deleteUser } = require("../cores/user.core");
+const {
+  updateUser,
+  deleteUser,
+  getSingleUser,
+  getAllUsers,
+  getUserStatistics,
+} = require("../cores/user.core");
 const {
   verifyToken,
   verifyTokenAndAuthorization,
@@ -13,5 +19,11 @@ router.put("/:id", verifyTokenAndAuthorization, updateUser);
 // DELETE USER
 router.delete("/:id", verifyTokenAndAuthorization, deleteUser);
 
-// DELETE USER
-router.get("/:id", verifyTokenAndAuthorization, deleteUser);
+// GET USER
+router.get("/find/:id", verifyTokenAndAdmin, getSingleUser);
+
+// GET USERS
+router.get("/", verifyTokenAndAdmin, getAllUsers);
+
+// GET USER STATISTICS
+router.get("/stats", verifyTokenAndAdmin, getUserStatistics);
