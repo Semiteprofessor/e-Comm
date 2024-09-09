@@ -3,10 +3,11 @@ import { Search, ShoppingCartOutlined } from "@mui/icons-material";
 import styled from "styled-components";
 import { mobile } from "../responsive";
 import { useSelector } from "react-redux";
-import { Link, NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const Container = styled.div`
   height: 60px;
+  /* background-color: white; */
   ${mobile({ height: "50px" })}
 `;
 

@@ -20,22 +20,19 @@ function App() {
     <>
       <Router>
         <Routes>
-          <Route exact path="/" element={<Home />} />
+          <Route path="/" element={<Home />} />
           <Route path="/products/:category" element={<ProductList />} />
           <Route path="/product/:id" element={<Product />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/success" element={<Success />} />
-          {user ? (
-            <Route index element={<Navigate to="/" />} />
-          ) : (
-            <Route path="/login" element={<Login />} />
-          )}
-
-          {user ? (
-            <Route index element={<Navigate to="/" />} />
-          ) : (
-            <Route path="/register" element={<Register />} />
-          )}
+          <Route
+            path="/login"
+            element={user ? <Navigate to="/" /> : <Login />}
+          />
+          <Route
+            path="/register"
+            element={user ? <Navigate to="/" /> : <Register />}
+          />
         </Routes>
       </Router>
     </>
