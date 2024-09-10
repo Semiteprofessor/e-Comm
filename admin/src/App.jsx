@@ -18,40 +18,25 @@ import Login from "./pages/login/Login";
 import { useSelector } from "react-redux";
 
 function App() {
-  const admin = useSelector((state) => state.user.currentUser.isAdmin);
+  const admin = useSelector((state) => state.user.currentUser);
   return (
     <>
       <Router>
         <Routes>
-          <Route path="/login">
-            <Login />
-          </Route>
+          <Route path="/login" element={<Login />} />
           {admin && (
             <>
               <Topbar />
               <div className="container">
                 <Sidebar />
-                <Route exact path="/">
-                  <Home />
-                </Route>
-                <Route path="/users">
-                  <UserList />
-                </Route>
-                <Route path="/user/:userId">
-                  <User />
-                </Route>
-                <Route path="/newUser">
-                  <NewUser />
-                </Route>
-                <Route path="/products">
-                  <ProductList />
-                </Route>
-                <Route path="/product/:productId">
-                  <Product />
-                </Route>
-                <Route path="/newproduct">
-                  <NewProduct />
-                </Route>
+                <Route exact path="/" element={<Home />} />
+                <Route path="/users" element={<UserList />} />
+                <Route path="/user/:userId" element={<User />} />
+                <Route path="/newUser" element={<NewUser />} />
+                <Route path="/products" element={<ProductList />} />
+                <Route path="/product/:productId" element={<Product />} />
+
+                <Route path="/newproduct" element={<NewProduct />} />
               </div>
             </>
           )}
